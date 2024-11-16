@@ -7,7 +7,7 @@ import {
   responseSuccess,
 } from "../config/commonResponse";
 import httpStatus from "../config/httpStatus";
-import { IndexService } from "@ethsign/sp-sdk";
+import { getAttestationData } from "./signAttestation";
 
 const accessControlConditions = [
   {
@@ -89,37 +89,5 @@ export const serviceDycriptAndGetAttestation = async (
   } catch (error: any) {
     console.log("error:", error.message);
     return internalServerError(res, error.message);
-  }
-};
-
-const getAttestationData = async (requestId: string) => {
-  try {
-    const indexService = new IndexService("testnet");
-
-    const res = await indexService.queryAttestationList({
-      schemaId: process.env.SIGN_FULL_SCHEMA_ID,
-      attester: "0x0c5A1cE8FF7eb7e140f6b606245F356f0D5ec40A",
-      page: 1,
-      mode: "onchain", // Data storage location
-      indexingValue: requestId,
-    });
-
-    if (res) {
-      return {
-        success: true,
-        attestations: res.rows,
-      };
-    } else {
-      return {
-        success: false,
-        attestations: null,
-      };
-    }
-  } catch (error: any) {
-    console.log("error", error.message);
-    return {
-      success: false,
-      attestations: null,
-    };
   }
 };

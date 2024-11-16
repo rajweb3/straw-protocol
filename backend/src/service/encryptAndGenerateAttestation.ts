@@ -3,7 +3,7 @@ import { responseSuccess, internalServerError } from "../config/commonResponse";
 import httpStatus from "../config/httpStatus";
 import Lit from "./Lit";
 import { setRedisValue } from "../config/redisConfig";
-import { createNotaryAttestation } from "./generateAttestation";
+import { createNotaryAttestation } from "./signAttestation";
 
 const accessControlConditions = [
   {

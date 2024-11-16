@@ -20,7 +20,7 @@ We encountered several challenges and learning opportunities while integrating *
 
 - **Issue**: No built-in support for data compression.
   - Signing large payloads (e.g., `ciphertext`) frequently resulted in exceeding byte-size limitations like `bytes32`.
-- **Impact**: Forced developers to implement custom solutions for compression and hashing, leading to potential errors.
+- **Impact**: Forced to implement custom solutions for compression and hashing, leading to potential errors.
 
 ---
 
