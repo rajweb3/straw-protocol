@@ -61,13 +61,8 @@ class Lit {
   ): Promise<{
     ciphertext: string;
     dataToEncryptHash: string;
-    sessionSigs: any;
   }> {
     const litNodeClient = this.ensureClient();
-    const sessionSigs = litNodeClient.getSessionKey();
-    if (!sessionSigs) {
-      throw new Error("Failed to get session signatures.");
-    }
 
     const { ciphertext, dataToEncryptHash } = await LitJsSdk.encryptString(
       {
@@ -76,7 +71,7 @@ class Lit {
       },
       litNodeClient
     );
-    return { ciphertext, dataToEncryptHash, sessionSigs };
+    return { ciphertext, dataToEncryptHash };
   }
 
   async dycriptData(
