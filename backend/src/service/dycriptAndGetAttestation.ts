@@ -96,9 +96,8 @@ const getAttestationData = async (requestId: string) => {
   try {
     const indexService = new IndexService("testnet");
 
-    const attId = `onchain_evm_11155111_0x314`;
     const res = await indexService.queryAttestationList({
-      schemaId: "onchain_evm_11155111_0x314", // Your full schema's ID
+      schemaId: process.env.SIGN_FULL_SCHEMA_ID,
       attester: "0x0c5A1cE8FF7eb7e140f6b606245F356f0D5ec40A",
       page: 1,
       mode: "onchain", // Data storage location

@@ -1,14 +1,9 @@
 import { Request, Response } from "express";
-import {
-  requestFailed,
-  responseSuccess,
-  internalServerError,
-} from "../config/commonResponse";
+import { responseSuccess, internalServerError } from "../config/commonResponse";
 import httpStatus from "../config/httpStatus";
 import Lit from "./Lit";
 import { setRedisValue } from "../config/redisConfig";
 import { createNotaryAttestation } from "./generateAttestation";
-import CryptoJS from "crypto-js";
 
 const accessControlConditions = [
   {

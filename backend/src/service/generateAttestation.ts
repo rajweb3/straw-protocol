@@ -4,7 +4,7 @@ import { privateKeyToAccount } from "viem/accounts";
 const privateKey = process.env.PROTOCOL_PRIVATE_KEY as `0x${string}`;
 const client = new SignProtocolClient(SpMode.OnChain, {
   chain: EvmChains.sepolia,
-  account: privateKeyToAccount(privateKey), // Optional, depending on environment
+  account: privateKeyToAccount(privateKey),
 });
 
 export const createNotaryAttestation = async (
@@ -14,7 +14,7 @@ export const createNotaryAttestation = async (
 ) => {
   try {
     const response = await client.createAttestation({
-      schemaId: "0x314",
+      schemaId: process.env?.SIGN_SCHEMA_ID || "",
       data: {
         address,
         payload,
@@ -23,6 +23,6 @@ export const createNotaryAttestation = async (
     });
     return response;
   } catch (error: any) {
-    console.log("error", error.message);
+    return null;
   }
 };
