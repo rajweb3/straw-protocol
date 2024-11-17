@@ -76,7 +76,7 @@ interface IERC7683 {
     struct Output {
         /// @dev The address of the ERC20 token on the destination chain
         /// @dev address(0) used as a sentinel for the native token
-        bytes32 token;
+        address token;
         /// @dev The amount of the token to be sent
         uint256 amount;
         /// @dev The address to receive the output tokens
@@ -101,6 +101,14 @@ interface IERC7683 {
         bytes originData;
     }
 
+    struct OrderStake {
+        address user;
+        address filler;
+        Output minReceive;
+        bool orderSettled;
+        bool orderSuccessful;
+    }
+
     // Events as per spec
 
     /// @notice Signals that an order has been opened
@@ -120,6 +128,9 @@ interface IERC7683 {
     );
 
     event OrderFilled(bytes32 indexed orderHash, bytes fillData);
+
+    event OrderSettled(bytes32 indexed orderHash, bool successfullyFulfilled);
+
 
     // Core functions as per spec
 

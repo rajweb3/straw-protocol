@@ -17,3 +17,6 @@ node_modules
 ignition/deployments/chain-31337
 
 package-lock.json
+
+contract/.yarn
+contract/packages/foundry/out

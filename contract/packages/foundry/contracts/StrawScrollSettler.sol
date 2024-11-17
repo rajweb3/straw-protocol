@@ -10,24 +10,29 @@ import "./interfaces/IERC7863.sol";
 import "./interfaces/Permit2/IPermit2.sol";
 import "./interfaces/Permit2/ISignatureTransfer.sol";
 
-contract StrawSettler is IERC7683, ReentrancyGuard, AccessControl {
+contract StrawScrollSettler is IERC7683, ReentrancyGuard, AccessControl {
     using ECDSA for bytes32;
 
     // Constants
-    mapping(bytes32 => uint8) public orderResolved; // destination settler
-    
+    address immutable L1SLOAD_PRECOMPILE =
+        0x0000000000000000000000000000000000000101;
+    address immutable l1sloadContractAddress;
+
     bytes32 public constant ENS_ORDER_TYPE = keccak256("ENS_REGISTRATION_V1");
     bytes32 public constant ORACLE_ROLE = keccak256("TRUSTED_ORACLE_ROLE");
+
     bytes32 public immutable DOMAIN_SEPARATOR;
 
     // State variables
     IPermit2 public immutable permit2;
 
     mapping(bytes32 => bool) public orderExists; // origin settler
+    mapping(bytes32 => uint8) public orderResolved; // destination settler
     mapping(bytes32 => OrderStake) public orderSettlement; // settling the opened orders
     mapping(address => uint256) public nonces;
 
-    constructor(address _permit2) {
+    constructor(address _permit2, address _l1sloadContractAddress) {
+        l1sloadContractAddress = _l1sloadContractAddress;
         permit2 = IPermit2(_permit2);
         DOMAIN_SEPARATOR = keccak256(
             abi.encode(
@@ -247,7 +252,7 @@ contract StrawSettler is IERC7683, ReentrancyGuard, AccessControl {
 
         OrderStake memory orderDetails = orderSettlement[orderHash];
 
-        if (successfullyFulfilled) {
+        if (successfullyFulfilled && retrieveL1AddressToMapping(1, orderHash) == 1) {
             IERC20(address(orderDetails.minReceive.token)).transfer(
                 orderDetails.filler,
                 orderDetails.minReceive.amount
@@ -263,6 +268,29 @@ contract StrawSettler is IERC7683, ReentrancyGuard, AccessControl {
             orderSettlement[orderHash].orderSuccessful = false;
         }
         emit OrderSettled(orderHash, successfullyFulfilled);
+    }
+
+    function retrieveL1AddressToMapping(
+        uint256 variableStorageSlot,
+        bytes32 _mappingOrderHash
+    ) internal view returns (uint256) {
+        (bool success, bytes memory data) = L1SLOAD_PRECOMPILE.staticcall(
+            abi.encodePacked(
+                l1sloadContractAddress,
+                uint256(
+                    keccak256(
+                        abi.encodePacked(
+                            _mappingOrderHash,
+                            variableStorageSlot
+                        )
+                    )
+                )
+            )
+        );
+        if (!success) {
+            revert("Error extracting mapping data");
+        }
+        return abi.decode(data, (uint256));
     }
 
     function getEncodedData(
