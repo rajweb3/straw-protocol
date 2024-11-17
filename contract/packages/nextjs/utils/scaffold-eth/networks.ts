@@ -105,7 +105,7 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
     return "";
   }
 
-  return `${blockExplorerTxURL}/tx/${txnHash}`;
+  return `https://eth-sepolia.blockscout.com/tx/${txnHash}`;
 }
 
 /**
