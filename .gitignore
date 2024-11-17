@@ -20,3 +20,4 @@ package-lock.json
 
 contract/.yarn
 contract/packages/foundry/out
+*/lit_storage.db
