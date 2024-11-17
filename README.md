@@ -7,6 +7,7 @@
 ---
 
 ### Architecture of STRAW
+![straw_arch_f](https://github.com/user-attachments/assets/2e6d991d-a8c9-49d1-a72b-440b2bc398a3)
 
 #### Technologies Used
 
@@ -20,3 +21,5 @@
    - Trustless attestations for validating user actions and maintaining data integrity.
 5. **ENS Integration**:
    - Demonstrates service invocation through a user-friendly Ethereum Name Service interface.
+
+
